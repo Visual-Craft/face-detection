@@ -1,5 +1,5 @@
 # Face Detection
-Face detection microservice using Docker
+Face detection microservice using [face_recognition](https://github.com/ageitgey/face_recognition) and Docker
 
 ## Installation:
 * Clone/download sources
