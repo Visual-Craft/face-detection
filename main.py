@@ -16,7 +16,12 @@ def detect_faces():
 
     try:
         request.files['image'].save(path)
-        image = face_recognition.load_image_file(path)
+
+        try:
+            image = face_recognition.load_image_file(path)
+        except OSError:
+            abort(400)
+
         face_locations = face_recognition.face_locations(image)
     finally:
         os.remove(path)
