@@ -6,7 +6,7 @@ from tempfile import mkstemp
 app = Flask(__name__)
 
 
-@app.route('/api/v1/detect-faces', methods=['POST'])
+@app.route('/detect-faces', methods=['POST'])
 def detect_faces():
     if 'image' not in request.files:
         abort(400)
