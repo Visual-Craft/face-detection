@@ -51,7 +51,13 @@ def detect_faces():
         except OSError:
             abort(400, description="unable to load image")
 
-        face_locations = face_recognition.face_locations(image)
+        model = request.args.get('model', 'hog')
+        number_of_times_to_upsample = int(request.args.get('number_of_times_to_upsample', 1))
+
+        if number_of_times_to_upsample < 0:
+            abort(400, description="query parameter 'number_of_times_to_upsample' should be >= 0")
+
+        face_locations = face_recognition.face_locations(image, number_of_times_to_upsample=number_of_times_to_upsample, model=model)
     finally:
         os.remove(path)
 
