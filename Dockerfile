@@ -1,24 +1,16 @@
-FROM alpine:3.6
+FROM python:3.6
 
 LABEL maintainer="insovoid@gmail.com"
 
-RUN apk --no-cache add --virtual build-deps \
-    ca-certificates \
-    build-base \
-    gfortran \
-    cmake \
-    && apk --no-cache add \
-    python3 \
-    python3-dev \
-    lapack-dev \
-    boost-dev \
-    zlib-dev \
-    libjpeg-turbo-dev \
-    && update-ca-certificates \
-    && pip3 install gunicorn flask face_recognition \
+RUN DEBIAN_FRONTEND=noninteractive apt update -y \
+    && DEBIAN_FRONTEND=noninteractive apt upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt install --no-install-recommends -y \
+        cmake \
+    && pip install gunicorn flask face_recognition \
     && mkdir /app \
-    && apk del build-deps
+    && rm -rf /var/lib/apt
 
 ADD main.py /app/
 WORKDIR /app
-ENTRYPOINT ["gunicorn", "main:app", "-w 2", "-b 0.0.0.0:80"]
+ENTRYPOINT ["gunicorn", "main:app", "-b 0.0.0.0:80"]
+CMD ["-w 2"]
